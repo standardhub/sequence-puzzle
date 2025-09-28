@@ -34,6 +34,18 @@ $(document).ready(function () {
             return arrow;
         }
 
+        // Make sequence numbers to random numbers that can be made sequence
+        random() {
+            for (let i = 0; i < 1000; i++) {
+                let id = Math.floor((Math.random() * 10) % 9);
+                let arrow = this.getArrow(id, this.blank);
+                if (arrow) {
+                    this.numbers[this.blank] = this.numbers[id];
+                    this.numbers[id] = 0;
+                    this.blank = id;
+                }
+            }
+        }
 
         // Assign numbers to each positions
         async assign() {
@@ -93,6 +105,7 @@ $(document).ready(function () {
         }
 
         startGame() {
+            this.random();
             this.assign();
             this.displayNumber();
         }
