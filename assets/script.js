@@ -63,7 +63,10 @@ $(document).ready(function () {
             if (sequence == '123456789' && !this.gameOver) {
                 $('#9').text('9').removeClass('transparent').addClass('btn btn-secondary zoom');
                 this.gameOver = true;
-                alert("You Win!");
+                setTimeout(() => {
+                    $(".modal-text").text("You Win!");
+                    $("#end_modal").show();
+                }, 600);
             }
             $("#step").text(this.step);
         }
@@ -81,7 +84,10 @@ $(document).ready(function () {
                 };
 
                 if (this.step == 100) {
-                    alert("Gave Over!");
+                    setTimeout(() => {
+                        $(".modal-text").text("Gave Over!");
+                        $("#end_modal").show();
+                    }, 300);
                 };
             };
         }
@@ -101,4 +107,7 @@ $(document).ready(function () {
         newGame.clickButton(id);
     });
 
+    $(".close-modal").click(() => {
+        $(".end-modal").hide();
+    });
 })
