@@ -89,10 +89,14 @@ $(document).ready(function () {
             if (arrow) {
                 this.step++;
                 if (this.step <= 100 && !this.gameOver) {
-                    this.positions[this.blank].val = this.positions[id].val;
-                    this.positions[id].val = 0;
-                    this.blank = id;
-                    this.displayNumber();
+                    $(`#${id}`).addClass(`${arrow}`);
+                    setTimeout(() => {
+                        this.positions[this.blank].val = this.positions[id].val;
+                        this.positions[id].val = 0;
+                        this.blank = id;
+                        this.displayNumber();
+                        $(`#${id}`).removeClass(`${arrow}`);
+                    }, 250);
                 };
 
                 if (this.step == 100) {

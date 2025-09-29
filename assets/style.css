@@ -112,3 +112,74 @@ button {
     text-align: center;
     margin: 20px 0;
 }
+
+/* <----- Move Animation -----> */
+
+.right {
+    position: relative;
+    transition: ease-out;
+    animation-name: right;
+    animation-duration: 0.3s;
+}
+
+@keyframes right {
+    from { left: 0px; top: 0px; }
+    to { left: 100px; top: 0px; }
+}
+
+.left {
+    position: relative;
+    transition: ease-out;
+    animation-name: left;
+    animation-duration: 0.3s;
+}
+
+@keyframes left {
+    from { left: 0px; top: 0px; }
+    to { left: -100px; top: 0px; }
+}
+
+.up {
+    position: relative;
+    transition: ease-out;
+    animation-name: up;
+    animation-duration: 0.3s;
+}
+
+@keyframes up {
+    from { left: 0px; top: 0px; }
+    to { left: 0px; top: -100px; }
+}
+
+.down {
+    position: relative;
+    transition: ease-out;
+    animation-name: down;
+    animation-duration: 0.3s;
+}
+
+@keyframes down {
+    from { left: 0px; top: 0px; }
+    to { left: 0px; top: 100px; }
+}
+
+.transparent {
+    opacity: 0;
+}
+
+.zoom {
+    animation-name: zoom;
+    animation-duration: 0.8s;
+}
+
+@keyframes zoom {
+    from { opacity: 0; }
+    to { opacity: 1;}
+}
+
+.number-btn {
+    background-color: #888;
+    height: 100%;
+    width: 100%;
+    color: black;
+}
