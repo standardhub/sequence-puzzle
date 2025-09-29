@@ -13,8 +13,17 @@
     <div class="main">
         <div class="puzzle-header">
             <h1>Sequence</h1>
-            <div class="steps">
+            <div class="top-score">
+                <span>Top Score:</span>
+                <span id="score-time">0</span><span>S,</span>
+                <span id="score-steps">0</span><span>Steps</span>
+            </div>
+            <div class="timer">
                 <img src="./assets/click.svg" height="20px" width="20px" alt="click">
+                <span id="time">0</span><span>S</span>
+            </div>
+            <div class="steps">
+                <img src="./assets/penguin.svg" height="20px" width="20px" alt="click">
                 <span id="step"></span><span>steps</span>
             </div>
         </div>
@@ -33,22 +42,26 @@
                 <div class="row">
                     <div class="col-md-3 box"><button type="button" id="6" class="num-btn"></button></div>
                     <div class="col-md-3 box"><button type="button" id="7" class="num-btn"></button></div>
-                    <div class="col-md-3 box"><button type="button" id="8" class="num-btn"><button type="button" id="9" class="transparent"></button></button></div>
+                    <div class="col-md-3 box"><button type="button" id="8" class="num-btn"></button><button type="button" id="9" class="transparent"></button></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="end-modal" id="end_modal">
         <div class="modal-main">
-            <div class="modal-text"></div>
+
+            <div class="modal-text">
+            </div>
+
             <div class="">
                 <button type="button" class="btn btn-danger close-modal">Close</button>
             </div>
+
         </div>
     </div>
 </body>
-<script src="./assets/bootstrap/bootstrap.min.js"></script>
 <script src="./assets/jquery/jquery.js"></script>
+<script src="./assets/bootstrap/bootstrap.min.js"></script>
 <script src="./assets/script.js"></script>
 
 </html>

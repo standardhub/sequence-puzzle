@@ -35,6 +35,26 @@ button {
     padding: 30px;
 }
 
+.top-score {
+    position: absolute;
+    top: 10px;
+    left: 20px;
+    width: 220px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    align-items: center;
+}
+.timer {
+    position: absolute;
+    left: 20px;
+    width: 65px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    align-items: center;
+}
+
 .steps {
     position: absolute;
     right: 20px;
@@ -46,6 +66,7 @@ button {
 }
 
 .puzzle-content {
+    position: relative;
     height: 380px;
     background-color: rgb(223, 223, 223);
     display: flex;
@@ -203,15 +224,16 @@ button {
         padding: 30px;
     }
 
+    .timer {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+    }
+
     .steps {
         position: absolute;
         right: 20px;
         bottom: 20px;
-        width: 100px;
-        display: flex;
-        justify-content: space-between;
-        font-size: 20px;
-        align-items: center;
     }
 
     .puzzle-content {
@@ -219,8 +241,10 @@ button {
     }
 
     .puzzle-panel {
-        width: 90.9vw;
-        height: 90.9vw;
+        width: 92vw;
+        height: 92vw;
+        border: rgb(73, 73, 73) solid 1vw;
+
     }
 
     .box {

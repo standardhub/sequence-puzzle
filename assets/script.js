@@ -1,21 +1,19 @@
 $(document).ready(function () {
+
     class Game {
         constructor() {
             this.gameOver = false;
-            this.numbers = [1, 2, 3, 4, 5, 6, 7, 0, 8];
-            this.blank = 7;
-            this.positions = [
-                { x: 1, y: 1 },
-                { x: 2, y: 1 },
-                { x: 3, y: 1 },
-                { x: 1, y: 2 },
-                { x: 2, y: 2 },
-                { x: 3, y: 2 },
-                { x: 1, y: 3 },
-                { x: 2, y: 3 },
-                { x: 3, y: 3 }
-            ];
-            this.step = 0;
+            this.numbers =// [1, 2, 3, 4, 5, 6, 7, 0, 8];
+                this.blank = //7;
+                this.positions = [
+                    { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 },
+                    { x: 1, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 },
+                    { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }
+                ];
+            this.step = //0;
+                this.time = //0;
+                this.score = //[99999, 9999];
+                this.interval;
         }
 
         // Decode arrow to move
@@ -34,16 +32,24 @@ $(document).ready(function () {
             return arrow;
         }
 
-        // Make sequence numbers to random numbers that can be made sequence
+        // Make random number array that can be made sequence and asign it to this.numbers
         random() {
+            let numberArray = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+            let zeroPosition = 8;
             for (let i = 0; i < 1000; i++) {
                 let id = Math.floor((Math.random() * 10) % 9);
-                let arrow = this.getArrow(id, this.blank);
+                let arrow = this.getArrow(id, zeroPosition);
                 if (arrow) {
-                    this.numbers[this.blank] = this.numbers[id];
-                    this.numbers[id] = 0;
-                    this.blank = id;
+                    numberArray[zeroPosition] = numberArray[id];
+                    numberArray[id] = 0;
+                    zeroPosition = id;
                 }
+            }
+            if (numberArray.toString() == '1,2,3,4,5,6,7,8,0') {
+                this.random();
+            } else {
+                this.numbers = numberArray;
+                this.blank = zeroPosition;
             }
         }
 
@@ -75,15 +81,26 @@ $(document).ready(function () {
             if (sequence == '123456789' && !this.gameOver) {
                 $('#9').text('9').removeClass('transparent').addClass('btn btn-secondary zoom');
                 this.gameOver = true;
+                this.stopTimer();
+
+                // Compare current score with previous score
+                this.score = [this.time, this.step];
+                let prevScore = localStorage.getItem('score').split(',');
+                if (this.score[0] < prevScore[0] && this.score[1] < prevScore[1]) {
+                    $("#score-time").text(this.time);
+                    $("#score-steps").text(this.step);
+                    localStorage.setItem('score', this.score.toString());
+                };
+
+                // Show Modal
+                $(".modal-text").text("You Win!");
                 setTimeout(() => {
-                    $(".modal-text").text("You Win!");
                     $("#end_modal").show();
                 }, 600);
             }
             $("#step").text(this.step);
         }
 
-        // Get click event from number button
         clickButton(id) {
             let arrow = this.getArrow(id, this.blank);
             if (arrow) {
@@ -108,10 +125,35 @@ $(document).ready(function () {
             };
         }
 
+        startTimer() {
+            this.time = 0;
+            this.interval = setInterval(() => {
+                this.time += 1;
+                $("#time").text(this.time);
+            }, 1000);
+        }
+
+        stopTimer() {
+            clearInterval(this.interval);
+        }
+
+        displayScore() {
+            let prevScore = localStorage.getItem('score');
+            if (prevScore) {
+                if (prevScore == '999,999') prevScore = '0,0';
+                $("#score-time").text(prevScore.split(',')[0]);
+                $("#score-steps").text(prevScore.split(',')[1]);
+            } else {
+                localStorage.setItem('score', "999,999");
+            }
+        }
+
         startGame() {
+            this.displayScore();
             this.random();
             this.assign();
             this.displayNumber();
+            this.startTimer();
         }
     }
 
@@ -126,10 +168,5 @@ $(document).ready(function () {
 
     $(".close-modal").click(() => {
         $(".end-modal").hide();
-        newGame.gameOver = false;
-        newGame.numbers = [1, 2, 3, 4, 5, 6, 7, 0, 8];
-        newGame.blank = 7;
-        newGame.step = 0;
-        newGame.startGame();
     });
 })
