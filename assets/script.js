@@ -2,8 +2,8 @@ $(document).ready(function () {
     class Game {
         constructor() {
             this.gameOver = false;
-            this.numbers = [8, 5, 1, 2, 4, 7, 3, 6, 0];
-            this.blank = 8;
+            this.numbers = [1, 2, 3, 4, 5, 6, 7, 0, 8];
+            this.blank = 7;
             this.positions = [
                 { x: 1, y: 1 },
                 { x: 2, y: 1 },
@@ -126,5 +126,10 @@ $(document).ready(function () {
 
     $(".close-modal").click(() => {
         $(".end-modal").hide();
+        newGame.gameOver = false;
+        newGame.numbers = [1, 2, 3, 4, 5, 6, 7, 0, 8];
+        newGame.blank = 7;
+        newGame.step = 0;
+        newGame.startGame();
     });
 })

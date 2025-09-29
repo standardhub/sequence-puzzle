@@ -183,3 +183,71 @@ button {
     width: 100%;
     color: black;
 }
+
+/* <----- Mobile Responsive -----> */
+
+@media only screen and (max-width: 500px) {
+    .main {
+        height: 100%;
+        width: 100%;
+    }
+
+    .puzzle-header {
+        position: relative;
+        height: 25%;
+        background-color: rgb(194, 194, 194);
+        border-bottom: rgb(158, 158, 158) solid 1px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    .steps {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        width: 100px;
+        display: flex;
+        justify-content: space-between;
+        font-size: 20px;
+        align-items: center;
+    }
+
+    .puzzle-content {
+        height: 75%;
+    }
+
+    .puzzle-panel {
+        width: 90.9vw;
+        height: 90.9vw;
+    }
+
+    .box {
+        height: 30vw;
+        width: 30vw;
+        border: rgb(163, 163, 163) solid 0.1px;
+        text-align: center;
+        padding: 0;
+    }
+
+    @keyframes right {
+        from { left: 0px; top: 0px; }
+        to { left: 30vw; top: 0px; }
+    }
+
+    @keyframes left {
+        from { left: 0px; top: 0px; }
+        to { left: -30vw; top: 0px; }
+    }
+
+    @keyframes up {
+        from { left: 0px; top: 0px; }
+        to { left: 0px; top: -30vw; }
+    }
+    
+    @keyframes down {
+        from { left: 0px; top: 0px; }
+        to { left: 0px; top: 30vw; }
+    }
+}
