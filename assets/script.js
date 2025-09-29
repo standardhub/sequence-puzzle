@@ -101,28 +101,53 @@ $(document).ready(function () {
             $("#step").text(this.step);
         }
 
-        clickButton(id) {
-            let arrow = this.getArrow(id, this.blank);
-            if (arrow) {
-                this.step++;
-                if (this.step <= 100 && !this.gameOver) {
-                    $(`#${id}`).addClass(`${arrow}`);
-                    setTimeout(() => {
+        // Get click event from number button
+        move(id) {
+            if (id >= 0 && id < 9) {
+                let arrow = this.getArrow(id, this.blank);
+                if (arrow) {
+                    this.step++;
+                    if (this.step <= 100 && !this.gameOver) {
+                        $(`#${id}`).addClass(`${arrow}`);
                         this.positions[this.blank].val = this.positions[id].val;
                         this.positions[id].val = 0;
                         this.blank = id;
-                        this.displayNumber();
-                        $(`#${id}`).removeClass(`${arrow}`);
-                    }, 250);
-                };
+                        setTimeout(() => {
+                            this.displayNumber();
+                            $(`#${id}`).removeClass(`${arrow}`);
+                        }, 260);
+                    };
 
-                if (this.step == 100) {
-                    setTimeout(() => {
-                        $(".modal-text").text("Gave Over!");
-                        $("#end_modal").show();
-                    }, 300);
+                    if (this.step == 100) {
+                        setTimeout(() => {
+                            $(".modal-text").text("Gave Over!");
+                            $("#end_modal").show();
+                        }, 300);
+                    };
                 };
-            };
+            }
+        }
+
+        keyEvent() {
+            window.addEventListener("keydown", e => {
+                let key = e.key;
+                switch (key) {
+                    case 'ArrowUp':
+                        this.move(this.blank + 3);
+                        break;
+                    case 'ArrowDown':
+                        this.move(this.blank - 3)
+                        break;
+                    case 'ArrowLeft':
+                        this.move(this.blank + 1)
+                        break;
+                    case 'ArrowRight':
+                        this.move(this.blank - 1)
+                        break;
+                    default:
+                        break;
+                }
+            })
         }
 
         startTimer() {
@@ -154,6 +179,7 @@ $(document).ready(function () {
             this.assign();
             this.displayNumber();
             this.startTimer();
+            this.keyEvent();
         }
     }
 
@@ -163,7 +189,7 @@ $(document).ready(function () {
 
     $('.num-btn').click(function () {
         let id = $(this).attr("id");
-        newGame.clickButton(id);
+        newGame.move(id);
     });
 
     $(".close-modal").click(() => {
