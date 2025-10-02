@@ -275,3 +275,14 @@ button {
         to { left: 0px; top: 30vw; }
     }
 }
+
+.help {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    height: 60px;
+    width: 60px;
+    padding: 0;
+    border: none;
+    background-color: #ffffff00;
+}
