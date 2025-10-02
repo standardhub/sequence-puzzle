@@ -3,17 +3,19 @@ $(document).ready(function () {
     class Game {
         constructor() {
             this.gameOver = false;
-            this.numbers =// [1, 2, 3, 4, 5, 6, 7, 0, 8];
-                this.blank = //7;
-                this.positions = [
-                    { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 },
-                    { x: 1, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 },
-                    { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }
-                ];
-            this.step = //0;
-                this.time = //0;
-                this.score = //[99999, 9999];
-                this.interval;
+            this.numbers;// [1, 2, 3, 4, 5, 6, 7, 0, 8];
+            this.blank; //7;
+            this.positions = [
+                { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 },
+                { x: 1, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 },
+                { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }
+            ];
+            this.step; //0;
+            this.time;//0;
+            this.score; //[99999, 9999];
+            this.interval;
+            this.assisArray = [];
+            this.searchDeep = 23;
         }
 
         // Decode arrow to move
@@ -34,7 +36,7 @@ $(document).ready(function () {
 
         // Make random number array that can be made sequence and asign it to this.numbers
         random() {
-            let numberArray = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+            let numberArray = [8, 7, 6, 5, 4, 3, 2, 1, 0];
             let zeroPosition = 8;
             for (let i = 0; i < 1000; i++) {
                 let id = Math.floor((Math.random() * 10) % 9);
@@ -173,6 +175,112 @@ $(document).ready(function () {
             }
         }
 
+        assistant() {
+            let searchNumbers = [];
+            for (let i = 0; i < this.positions.length; i++) {
+                searchNumbers[i] = this.positions[i].val;
+            }
+            console.log('searchNumbers', searchNumbers);
+            let zeroIndex = searchNumbers.indexOf(0);
+            let deep = 0;
+            let result = [];
+            const positions = [
+                { x: 1, y: 1 }, { x: 2, y: 1 }, { x: 3, y: 1 },
+                { x: 1, y: 2 }, { x: 2, y: 2 }, { x: 3, y: 2 },
+                { x: 1, y: 3 }, { x: 2, y: 3 }, { x: 3, y: 3 }
+            ];
+            const neighbour = [
+                [1, 3],
+                [0, 2, 4],
+                [1, 5],
+                [0, 4, 6],
+                [1, 3, 5, 7],
+                [2, 4, 8],
+                [3, 7],
+                [4, 6, 8],
+                [5, 7]
+            ];
+
+            function swapValue(a, b) {
+                searchNumbers[a] = searchNumbers[b];
+                searchNumbers[b] = 0;
+            }
+
+            // Calculate manhattan distance
+            function md(a, b) {
+                const x = positions[a].x;
+                const y = positions[a].y;
+                const xb = positions[b].x;
+                const yb = positions[b].y;
+                return Math.abs(xb - x) + Math.abs(yb - y);
+            }
+
+            // Manhattan sum of manhattan distance of one block
+            function esmd(numbers) {
+                let ms = 0;
+                for (let i = 0; i < numbers.length; i++) {
+                    numbers[i] ? ms += md(numbers[i] - 1, i) : ms += md(8, i);
+                }
+                return ms;
+            }
+
+
+            let zero = [];
+            let stack = [];
+            let smallSumMd = 999999;
+            function search(zeroIndex, sumEsmd) {
+                if (deep <= 21) {
+                    for (let i = 0; i < neighbour[zeroIndex].length; i++) {
+                        if (deep > 0 && zero[deep - 1] == neighbour[zeroIndex][i]) continue;
+                        zero[deep] = zeroIndex;
+                        swapValue(zeroIndex, neighbour[zeroIndex][i]);
+                        sumEsmd += esmd(searchNumbers);
+                        stack[deep] = neighbour[zeroIndex][i];
+                        deep++;
+
+                        search(searchNumbers.indexOf(0), sumEsmd);
+
+                        deep--;
+                        sumEsmd -= esmd(searchNumbers);
+                        swapValue(neighbour[zeroIndex][i], zeroIndex);
+                    }
+                } else {
+                    if (sumEsmd < smallSumMd) {
+                        smallSumMd = sumEsmd;
+                        for (let i = 0; i < deep; i++) result[i] = stack[i];
+                        // result = stack;
+                        console.log('zero', zero);
+                        console.log('stack', stack);
+                        console.log('result', result);
+                        return;
+                    }
+                    return;
+                }
+
+
+            }
+
+            search(zeroIndex, 0);
+            console.log('result', result);
+            this.assisArray = result;
+        }
+
+        help() {
+            let helpInterval;
+            console.log(this.assisArray);
+            let i = 0;
+            helpInterval = setInterval(() => {
+                if (i <= 21) {
+                    this.move(this.assisArray[i]);
+                    i++;
+                    console.log(i);
+                } else {
+                    clearInterval(helpInterval);
+                    this.assistant();
+                }
+            }, 400);
+        }
+
         startGame() {
             this.displayScore();
             this.random();
@@ -180,6 +288,7 @@ $(document).ready(function () {
             this.displayNumber();
             this.startTimer();
             this.keyEvent();
+            this.assistant();
         }
     }
 
@@ -195,4 +304,8 @@ $(document).ready(function () {
     $(".close-modal").click(() => {
         $(".end-modal").hide();
     });
+
+    $(".help").click(() => {
+        newGame.help();
+    })
 })
