@@ -1,71 +1,113 @@
+# Sequence Puzzle Game
 
-# Sequence Puzzle
+This repository contains a small browser-based 8-puzzle (sequence puzzle) game. The goal is to move the numbered tiles so that they are ordered in ascending sequence (1 → 8) with a single empty space. Players move one tile at a time into the blank space. If the number of steps exceeds 100 the game ends as "Game Over".
 
-A small interactive sequence puzzle web app. The puzzle presents sequences (numbers, shapes, or symbols) and asks the player to choose the next item in the sequence. This repository contains the HTML/CSS/JS and assets needed to run the puzzle locally in a browser.
+## Quick overview
 
-## What this is
+- Game type: 3x3 sliding puzzle (8-puzzle)
+- UI: static HTML + CSS using Bootstrap grid and Bootstrap 5 buttons (assets and HTML included in this repo)
+- Play rules: move one tile into the empty slot per step; initial steps = 0; win when tiles are in ascending order; lose if steps > 100
 
-- Objective: look at the sequence shown on the page and pick the correct next item to complete the sequence.
-- Interaction: click/tap on one of the answer options. The game will indicate whether the choice is correct and advance or show feedback.
+## Files of interest
 
-Note: assumptions were made about exact gameplay and behavior because the project contains only static files (`sequence puzzle.html`, `assets/`, `script.js`, `style.css`) and no separate documentation. If you'd like the README updated with exact rules, screenshots, or challenge examples, point me to the desired details or open the `.docx` file.
+- `sequence puzzle.html` — main HTML file to open in the browser
+- `style.css` — styles for the game (in `assets/`)
+- `script.js` — game logic and interactions (in `assets/`)
+- `assets/` — images, icons, bootstrap and jquery directories used by the page
 
-## Files in this folder
+Open `sequence puzzle.html` in a browser to run the game locally. No build step required (static site).
 
-- `sequence puzzle.html` — the main HTML page to open in your browser.
-- `assets/` — image and static assets used by the page (icons, styles, scripts). Contains:
-	- `click.svg` — an icon used for click feedback
-	- `script.js` — JavaScript that implements the game logic and interactivity
-	- `style.css` — stylesheet for layout and visuals
-	- `bootstrap/` — local copy of Bootstrap CSS/JS used for layout and responsive behaviour
-	- `jquery/` — local copy of jQuery used by the scripts
-- `Sequence puzzle.docx` — author notes or original puzzle document (may contain puzzle text or screenshots).
+## How to run (local)
 
-## How to run
+1. Open the project folder in your file manager or editor.
+2. Double-click `sequence puzzle.html` or open it in your browser (Chrome, Edge, Firefox).
 
-The app is static and does not require a server, but some browsers restrict local file requests for JS or assets when opened via `file://`. Recommended options:
+Optional: serve with a simple static server for consistent behavior (recommended when testing fetch or service-worker code):
 
-1) Open directly
+```powershell
+# from the repository root (Windows PowerShell)
+python -m http.server 8000
+# then open http://localhost:8000/sequence%20puzzle/sequence%20puzzle.html
+```
 
-	 - Double-click `sequence puzzle.html` or open it with your browser. This should work in most cases.
+## How to play
 
-2) Serve with a simple local HTTP server (recommended)
+- When the page opens, the puzzle is displayed and the step counter is zero.
+- Click (or use keyboard arrows if implemented) a tile adjacent to the blank to move it into the blank space.
+- The game finishes when the tiles are ordered (1..8). A congratulations dialog should appear on win.
+- If steps exceed 100, the game ends and shows "Game Over".
 
-	 - If you have Python installed, from the project folder run (PowerShell):
+Controls:
+- Mouse: click a movable tile to slide it into the blank.
+- Keyboard (if enabled): use arrow keys to move the blank (or tiles) where supported.
 
-		 ```powershell
-		 python -m http.server 8000
-		 ```
+## Requirements mapping (from assignment)
 
-		 Then open http://localhost:8000/ in your browser and navigate to `sequence%20puzzle/sequence%20puzzle.html` or simply click the file link.
+- Use Bootstrap Grid for layout — UI includes Bootstrap grid structure in `sequence puzzle.html` (check the HTML for `.container`, `.row`, `.col-` elements).
+- Use Bootstrap 5 buttons — action buttons in the UI should use Bootstrap 5 classes (`btn`, `btn-primary`, etc.).
+- Deadline: 2 days — see the Version / Roadmap below for priorities.
 
-	 - If you use VS Code, you can also use the Live Server extension to serve the folder and open the page.
+Bonus items (recommended/optional):
+- Mobile responsive — layout is designed to be responsive via Bootstrap's grid; verify on small screens and tweak breakpoints in `style.css` if desired.
+- Animations — small CSS transitions improve tile movement feel; check `style.css` for transition rules.
+- Use Classes during development — the JavaScript can be refactored to a class-based implementation for clarity and reuse.
+- Random arrangement logic on start — ensure the board is randomized to a solvable state when a new game starts.
 
-## Development notes
+## Version 1.1 (Required enhancements)
 
-- The primary interactive logic lives in `assets/script.js`. Editing that file will change puzzle behavior.
-- Styles are in `assets/style.css` and Bootstrap is available under `assets/bootstrap/`.
-- jQuery is available locally at `assets/jquery/jquery.js`.
+- Add timer in the top-left corner (stopwatch counting seconds since start).
+- When the game finishes (win or game over), save the top score (lowest steps and its time) to `localStorage`. Only update stored score/time when the current run is better than the saved top score.
+- Add keyboard events and mouse events for controlling tiles (both recommended).
 
-Suggested small improvements (I can implement any of these on request):
-- Add a `package.json` and a very small dev server script to standardize running the project.
-- Add a test page or screenshot images to this README for quick preview.
-- Extract puzzle data to a JSON file so new puzzles can be added without editing JS.
+Acceptance criteria for v1.1:
+- Timer visible and accurate.
+- On win, `localStorage` contains an object such as `{ steps: 42, time: 120 }` representing the top (best) score.
+- Keyboard and mouse controls work reliably.
 
-## Troubleshooting
+## Version 2.0 (AI assistant)
 
-- If images or icons don't appear, make sure your browser isn't blocking local file requests. Serve via HTTP if necessary.
-- If interactions don't work, open the browser developer console (F12) and look for errors coming from `assets/script.js` or missing file 404s.
+Goal: add a simple AI assistant that searches moves using Manhattan distance as a heuristic.
 
-## License & Credits
+Specification highlights:
+- A fish icon in the bottom-right starts the AI assistant.
+- When clicked, lock the UI and show a waiting spinner while the AI performs a search up to depth = 10.
+- The search expands game states in a tree and scores them by Manhattan distance. After searching, the UI will animate the best path up to 10 moves, applying them step-by-step.
 
-This repository contains static puzzle files. No license file is provided here — if you want an open-source license added (MIT, CC-BY, etc.), tell me which one and I will add it.
+Notes:
+- This is intentionally simple and limited (depth 10) to keep the calculation tractable in the browser.
+- Use web-worker if you expect the search to block the UI; otherwise show a loading overlay while running the search on the main thread.
 
-Assets: Bootstrap and jQuery are included locally; please ensure you comply with their licenses when distributing.
+## Implementation notes / tips for contributors
 
----
+- Ensure the start-shuffle algorithm only creates solvable permutations (8-puzzle solvability rule).
+- Prefer a class-based `Game` or `Puzzle` implementation that exposes methods like `shuffle()`, `move(tileIndex)`, `isSolved()`, `getState()` and `loadState()`.
+- Keep DOM manipulation minimal: use a render function that updates the board from the game state.
+- Store only the best score in `localStorage` under a single key, e.g. `sequence-puzzle:topScore`.
 
-If you'd like, I can also:
-- add screenshots to this README,
-- create a tiny `package.json` and `npm` scripts that run a local server,
-- or extract puzzles into a JSON-driven format so non-developers can add new puzzles.
+Example `localStorage` shape:
+
+```json
+{
+	"steps": 32,
+	"time": 95
+}
+```
+
+## Testing checklist
+
+- Open the page and verify the initial step counter is zero.
+- Start a new game; ensure the board shuffles into a solvable layout.
+- Move tiles by mouse and (if implemented) keyboard — the step counter increments once per move.
+- Let steps exceed 100 and confirm the game shows "Game Over".
+- Win a game and verify the congratulation dialog appears and top score saves to `localStorage`.
+
+## Next steps / roadmap
+
+1. Implement v1.1 features (timer, top-score localStorage, keyboard controls).
+2. Polish UI and responsiveness, add subtle CSS tile animations.
+3. Implement v2.0 AI assistant with a depth-limited search and optional web worker.
+
+## License & contact
+
+This project is provided as-is for learning and demonstration purposes. For questions or to contribute, open an issue or contact the author via the repository.
+
